@@ -1,0 +1,6 @@
+Django
+psycopg2-binary
+Pillow
+ipython
+python-dotenv
+djangorestframework
