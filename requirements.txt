@@ -4,3 +4,4 @@ Pillow
 ipython
 python-dotenv
 djangorestframework
+django-filters

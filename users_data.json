@@ -1,0 +1,78 @@
+[
+    {
+        "model": "users.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$gLz2HJV2OxTZf6l2LAo2y5$fy9HXPO9WQCoYFQkBTzPI8NCLgNuQZ3Zflh0kfD/gVI=",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "test1",
+            "last_name": "test1",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-02-20T23:41:58.614Z",
+            "email": "test_1@test.ru",
+            "phone": null,
+            "city": null,
+            "avatar": "",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$720000$3tFGOqscb8REbUWZNjrWvV$SIHp5K1Fr5eZI+3cXeMkPCdxIIKva7wh7U4VRwzGkTo=",
+            "last_login": null,
+            "is_superuser": false,
+            "first_name": "test2",
+            "last_name": "test2",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2024-02-20T23:43:13.254Z",
+            "email": "test_2@test.ru",
+            "phone": null,
+            "city": null,
+            "avatar": "",
+            "groups": [],
+            "user_permissions": []
+        }
+    },
+    {
+        "model": "users.payment",
+        "pk": 1,
+        "fields": {
+            "user": 1,
+            "date_payment": "2024-02-21",
+            "course": 1,
+            "lesson": 4,
+            "total": 20000.0,
+            "pay_method": ""
+        }
+    },
+    {
+        "model": "users.payment",
+        "pk": 2,
+        "fields": {
+            "user": 2,
+            "date_payment": "2024-02-20",
+            "course": 2,
+            "lesson": 1,
+            "total": 10000.0,
+            "pay_method": ""
+        }
+    },
+    {
+        "model": "users.payment",
+        "pk": 3,
+        "fields": {
+            "user": 2,
+            "date_payment": "2024-02-20",
+            "course": 2,
+            "lesson": 1,
+            "total": 10000.0,
+            "pay_method": ""
+        }
+    }
+]
