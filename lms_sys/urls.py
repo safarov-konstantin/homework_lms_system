@@ -1,6 +1,8 @@
-from lms_sys.apps import LmsSysConfig
 from rest_framework.routers import DefaultRouter
+
 from django.urls import path
+
+from lms_sys.apps import LmsSysConfig
 from lms_sys.views import(
     CourseViewSet,
     LessonCreateAPIView,

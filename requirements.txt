@@ -5,3 +5,4 @@ ipython
 python-dotenv
 djangorestframework
 django-filters
+djangorestframework-simplejwt
