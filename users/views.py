@@ -50,3 +50,11 @@ class UserDestroyAPIView(generics.DestroyAPIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     permission_classes = [IsOwnerUser]
+
+
+class UserRetrieveAPIView(generics.RetrieveAPIView):
+    """
+    Контроллер для просмотра пользователя
+    """
+    serializer_class = UserSerializer
+    queryset = User.objects.all()

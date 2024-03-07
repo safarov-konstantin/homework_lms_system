@@ -1,19 +1,21 @@
 from rest_framework import viewsets, generics
 
+from users.permissions import IsModerator
+
 from lms_sys.serializers import CourseSerializer, LessonSerializer
 from lms_sys.models import Course, Lesson
-from lms_sys.permissions import IsOwner, IsModerator
+from lms_sys.permissions import IsOwner
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
 
-    def list(self, request, *args, **kwargs):
-        is_moderators = request.user.groups.filter(name='moderators').exists()
-        if not is_moderators:
-            self.queryset = self.queryset.filter(owner=request.user)
-        return super().list(request, *args, **kwargs)
+    def get_queryset(self):
+        qs = Course.objects.all()
+        if not self.request.user.is_moderator:
+            qs = qs.filter(owner=self.request.user)
+        return qs
 
     def get_permissions(self):
         permission_classes = []
@@ -43,8 +45,7 @@ class LessonListAPIView(generics.ListAPIView):
     queryset = Lesson.objects.all()
 
     def get_queryset(self):
-        is_moderators = self.request.user.groups.filter(name='moderators').exists()
-        if not is_moderators:
+        if not self.request.user.is_moderator:
             self.queryset = self.queryset.filter(owner=self.request.user)
         return super().get_queryset()
 

@@ -16,15 +16,19 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    @property
+    def is_moderator(self):
+        return self.groups.filter(name='moderators').exists()
+
 
 class Payment(models.Model):
-     
+
     user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='пользователь')
     date_payment = models.DateField(verbose_name='дата оплаты')
     course = models.ForeignKey(Course, on_delete=models.PROTECT, verbose_name='курс')
     lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='урок')
     total = models.FloatField(verbose_name='сумма оплаты')
-   
+
     pay_method = models.CharField(
         max_length=15,
         choices=(('cash', 'наличными'), ('card', 'картой')),
