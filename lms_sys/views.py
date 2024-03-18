@@ -1,15 +1,19 @@
 from rest_framework import viewsets, generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from users.permissions import IsModerator
 
 from lms_sys.serializers import CourseSerializer, LessonSerializer
-from lms_sys.models import Course, Lesson
+from lms_sys.models import Course, Lesson, Subscription
 from lms_sys.permissions import IsOwner
+from lms_sys.paginators import MyPagination
 
 
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    pagination_class = MyPagination
 
     def get_queryset(self):
         qs = Course.objects.all()
@@ -43,6 +47,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    pagination_class = MyPagination
 
     def get_queryset(self):
         if not self.request.user.is_moderator:
@@ -65,3 +70,18 @@ class LessonUpdataAPIView(generics.UpdateAPIView):
 class LessonDestroyAPIView(generics.DestroyAPIView):
     queryset = Lesson.objects.all()
     permission_classes = [IsOwner]
+
+
+class SubscriptionAPIView(APIView):
+    def post(self, request, pk):
+        user = request.user
+        course = generics.get_object_or_404(Course, id=pk)
+        subs_item, created = Subscription.objects.get_or_create(user=user, course=course)
+
+        if created:
+            message = 'Подписка добавлена'
+        else:
+            subs_item.delete()
+            message = 'Подписка удалена'
+
+        return Response({"message": message})

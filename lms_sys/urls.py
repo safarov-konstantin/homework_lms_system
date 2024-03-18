@@ -9,7 +9,8 @@ from lms_sys.views import(
     LessonDestroyAPIView,
     LessonListAPIView,
     LessonRetrieveAPIView,
-    LessonUpdataAPIView
+    LessonUpdataAPIView,
+    SubscriptionAPIView
 )
 
 app_name = LmsSysConfig.name
@@ -23,4 +24,5 @@ urlpatterns = [
     path('lessson/<int:pk>/', LessonRetrieveAPIView.as_view(), name='lessson-get'),
     path('lessson/update/<int:pk>/', LessonUpdataAPIView.as_view(), name='lessson-update'),
     path('lessson/delet/<int:pk>/', LessonDestroyAPIView.as_view(), name='lessson-delete'),
+    path('subscribe/<int:pk>/', SubscriptionAPIView.as_view(), name='subscribe'),
 ] + router.urls

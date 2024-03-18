@@ -149,5 +149,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
+        # для тестов отключаем IsAuthenticated
+        # 'rest_framework.permissions.AllowAny',
     ]
 }
