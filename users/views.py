@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, serializers
 from rest_framework.filters import OrderingFilter
 from rest_framework.permissions import AllowAny
 
@@ -8,6 +8,7 @@ from users.models import Payment, User
 from users.serializers import PaymentSerializer, UserSerializer
 from users.permissions import IsOwnerUser
 
+from users.services import create_stripe_price, create_stripe_session
 
 
 class PaymentListAPIView(generics.ListAPIView):
@@ -58,3 +59,18 @@ class UserRetrieveAPIView(generics.RetrieveAPIView):
     """
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+
+class PaymentCreateAPIView(generics.CreateAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    
+    def perform_create(self, serializer):
+        course = serializer.validated_data.get('course_id')
+        if not course:
+            raise serializers.ValidationError('Не выбран курс')
+
+        payment = serializer.save()
+        stripe_price_id = create_stripe_price(payment)
+        payment.payment_link, payment.payment_id = create_stripe_session(stripe_price_id)
+        payment.save()

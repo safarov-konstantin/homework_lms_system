@@ -41,9 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Third party apps
+    'drf_yasg',
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
+    
+    
 
     # First party apps
     'users',
@@ -153,3 +156,6 @@ REST_FRAMEWORK = {
         # 'rest_framework.permissions.AllowAny',
     ]
 }
+
+# settings stripe
+STRIPE_API_KEY = getenv('STRIPE_API_KEY')

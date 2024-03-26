@@ -35,9 +35,12 @@ class Payment(models.Model):
         verbose_name='способ оплаты'
     )
 
+    payment_link = models.URLField(max_length=400, verbose_name='Ссылка на оплату', **NULLABLE)
+    payment_id = models.CharField(max_length=255, verbose_name='Идентификатор платежа', unique=True, default=None)
+
     def __str__(self):
         return f"{self.user} {self.date_payment}"
 
     class Meta:
         verbose_name = "платеж"
-        verbose_name_plural = "платежы"
+        verbose_name_plural = "платежи"
