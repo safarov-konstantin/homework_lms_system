@@ -11,13 +11,16 @@ from users.views import (
     UserCreateAPIView,
     UserListAPIView,
     UserUpdateAPIView,
-    UserDestroyAPIView
+    UserDestroyAPIView,
+    PaymentCreateAPIView
 )
 
 app_name = UsersConfig.name
 
 urlpatterns = [
+    # payments
     path('payments/', PaymentListAPIView.as_view(), name='payments'),
+    path('payment/create/', PaymentCreateAPIView.as_view(), name='course-payment'),
     # aut jwt
     path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

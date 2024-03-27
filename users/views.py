@@ -64,7 +64,7 @@ class UserRetrieveAPIView(generics.RetrieveAPIView):
 class PaymentCreateAPIView(generics.CreateAPIView):
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
-    
+
     def perform_create(self, serializer):
         course = serializer.validated_data.get('course_id')
         if not course:
