@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils import timezone
+from django.conf import settings
 from lms_sys.models import Course, Lesson
 
 
@@ -23,11 +25,11 @@ class User(AbstractUser):
 
 class Payment(models.Model):
 
-    user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='пользователь')
-    date_payment = models.DateField(verbose_name='дата оплаты')
-    course = models.ForeignKey(Course, on_delete=models.PROTECT, verbose_name='курс')
-    lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='урок')
-    total = models.FloatField(verbose_name='сумма оплаты')
+    date_payment = models.DateTimeField(default=timezone.now, verbose_name='дата оплаты')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, verbose_name='пользователь', **NULLABLE)
+    course = models.ForeignKey(Course, on_delete=models.PROTECT, verbose_name='курс', default=None, **NULLABLE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.PROTECT, verbose_name='урок', default=None, **NULLABLE)
+    total = models.PositiveIntegerField(verbose_name='сумма оплаты')
 
     pay_method = models.CharField(
         max_length=15,
@@ -36,10 +38,10 @@ class Payment(models.Model):
     )
 
     payment_link = models.URLField(max_length=400, verbose_name='Ссылка на оплату', **NULLABLE)
-    payment_id = models.CharField(max_length=255, verbose_name='Идентификатор платежа', unique=True, default=None)
+    payment_id = models.CharField(max_length=255, verbose_name='Идентификатор платежа', unique=True, **NULLABLE)
 
     def __str__(self):
-        return f"{self.user} {self.date_payment}"
+        return f"{self.total} {self.date_payment}"
 
     class Meta:
         verbose_name = "платеж"

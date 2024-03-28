@@ -15,7 +15,7 @@ from users.views import (
     PaymentCreateAPIView
 )
 
-app_name = UsersConfig.name
+app_name: str = UsersConfig.name
 
 urlpatterns = [
     # payments

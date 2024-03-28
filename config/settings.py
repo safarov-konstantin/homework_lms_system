@@ -159,3 +159,16 @@ REST_FRAMEWORK = {
 
 # settings stripe
 STRIPE_API_KEY = getenv('STRIPE_API_KEY')
+
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+      'Basic': {
+            'type': 'basic'
+      },
+      'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+      }
+   }
+}

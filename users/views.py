@@ -66,11 +66,20 @@ class PaymentCreateAPIView(generics.CreateAPIView):
     serializer_class = PaymentSerializer
 
     def perform_create(self, serializer):
-        course = serializer.validated_data.get('course_id')
-        if not course:
-            raise serializers.ValidationError('Не выбран курс')
+        course = serializer.validated_data.get('course')
+        lesson = serializer.validated_data.get('lesson')
+        total = serializer.validated_data.get('total')
+
+        if not course and not lesson:
+            raise serializers.ValidationError('Не выбран курс или урок!')
+
+        if not total:
+            raise serializers.ValidationError('Не заполнена сумма платежа!')      
 
         payment = serializer.save()
+        payment.course = course
+        payment.total = total
         stripe_price_id = create_stripe_price(payment)
         payment.payment_link, payment.payment_id = create_stripe_session(stripe_price_id)
+        payment.user = self.request.user
         payment.save()
