@@ -4,10 +4,15 @@ from rest_framework.response import Response
 
 from users.permissions import IsModerator
 
-from lms_sys.serializers import CourseSerializer, LessonSerializer
 from lms_sys.models import Course, Lesson, Subscription
 from lms_sys.permissions import IsOwner
 from lms_sys.paginators import MyPagination
+from lms_sys.tasks import send_update_course
+from lms_sys.serializers import(
+    CourseSerializer,
+    LessonSerializer,
+    SubscriptionSerializer
+)
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -73,6 +78,9 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
 
 
 class SubscriptionAPIView(APIView):
+    serializer_class = SubscriptionSerializer
+    queryset = Subscription.objects.all()
+
     def post(self, request, pk):
         user = request.user
         course = generics.get_object_or_404(Course, id=pk)
@@ -85,3 +93,19 @@ class SubscriptionAPIView(APIView):
             message = 'Подписка удалена'
 
         return Response({"message": message})
+
+    def perform_create(self, serializer):
+        new_subscription = serializer.save()
+        new_subscription.user = self.request.user
+        new_subscription.save()
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        subscribed_users = instance.get_subscribed_users()
+
+        # Отправляем уведомление подписанному пользователю
+        for user in subscribed_users:
+            if user.email:
+                send_update_course.delay(user.email, instance.name)
+
+        return super().request(*args, **kwargs)

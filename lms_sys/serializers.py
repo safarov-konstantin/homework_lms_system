@@ -37,3 +37,9 @@ class CourseSerializer(serializers.ModelSerializer):
             return False
         else:
             return Subscription.objects.filter(user=user, course=instance).exists()
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
