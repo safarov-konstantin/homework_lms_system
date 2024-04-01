@@ -41,6 +41,16 @@ class CourseViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = self.request.user
+
+        # Отправляем уведомление подписанному пользователю
+        if user.email:
+            send_update_course.delay(instance.pk)
+
+        return super().update(request, *args, **kwargs)
+
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
@@ -98,14 +108,3 @@ class SubscriptionAPIView(APIView):
         new_subscription = serializer.save()
         new_subscription.user = self.request.user
         new_subscription.save()
-
-    def patch(self, request, *args, **kwargs):
-        instance = self.get_object()
-        subscribed_users = instance.get_subscribed_users()
-
-        # Отправляем уведомление подписанному пользователю
-        for user in subscribed_users:
-            if user.email:
-                send_update_course.delay(user.email, instance.name)
-
-        return super().request(*args, **kwargs)

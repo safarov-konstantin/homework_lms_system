@@ -188,7 +188,7 @@ CELERY_TIMEZONE = "UTC"
 # CELERY_BEAT
 CELERY_BEAT_SCHEDULE = {
     'task-name': {
-        'task': 'users.tasks.check_last_data',
+        'task': 'users.task.check_last_data',
         'schedule': timedelta(days=1),
     },
 }
